@@ -382,8 +382,13 @@ public final class HenPlus implements Interruptable {
             SigIntHandler.getInstance().pushInterruptable(this);
 
             try {
-                cmdLine = _fromTerminal ? Readline.readline(displayPrompt,
-                        false) : readlineFromFile();
+                if ( _fromTerminal ) {
+                    Readline.readline(displayPrompt, false);
+                    cmdLine = Readline.getLineBuffer();
+                }
+                else {
+                    cmdLine = readlineFromFile();
+                }
             } catch (final EOFException e) {
                 // EOF on CTRL-D
                 if (_sessionManager.getCurrentSession() != null) {
